@@ -1,0 +1,38 @@
+version: '3.8'  
+
+services:  
+  app:  
+    container_name: airdrop-proxy  
+    build:  
+      context: .  
+      dockerfile: Dockerfile  
+    ports:  
+      - "3000:3000"  
+      - "8081:8081"   
+    depends_on:  
+      - mongodb  
+    networks:  
+      - airdrop-network  
+    restart: always   
+
+  mongodb:  
+    container_name: airdrop-mongodb  
+    image: mongo:4.4  
+    ports:  
+      - "27017:27017"  
+    environment:  
+      - MONGO_INITDB_ROOT_USERNAME=mongodb  
+      - MONGO_INITDB_ROOT_PASSWORD=mongodb  
+      - MONGO_INITDB_DATABASE=airdrop_proxy  
+    volumes:  
+      - mongodb_data:/data/db  
+    networks:  
+      - airdrop-network  
+    restart: always
+
+networks:  
+  airdrop-network:  
+    driver: bridge  
+
+volumes:  
+  mongodb_data:
