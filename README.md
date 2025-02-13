@@ -10,109 +10,63 @@ Enables AI-NFTs to claim airdrops and delegate airdrop eligibility. This service
 ## ⛓️ Supported Networks
 - Solana
 - EVM (Coming soon)
-## 🚀 Quick Start
 
-### Local Development Setup
-```shell
-# Clone the repository
-git clone https://github.com/xNomad-AI/airdrop-proxy.git 
-cd airdrop-proxy
 
-# Install dependencies
-pnpm install
+## 🛠️ Primary Use Case  
+Project teams can register their airdrop programs using the following API. 
 
-# Setup environment variables
-cp .env.example .env 
+### Airdrop Registration API  
 
-# Start the service
-pnpm start:dev
-```
+**Endpoint**:  
+`POST https://airdrop-proxy.xnomad.ai/registry/registry`  
 
-### 🐳 Docker Deployment
+**Headers**:  
+`Content-Type: application/json`  
 
-```shell
-# Build and start the containers
-docker-compose up -d
+**Request Body**:  
+Below is an example of the request payload with parameter explanations:  
 
-# Monitor the logs
-docker-compose logs -f
-
-# Stop the service:
-docker-compose down
-```
-
-## 📊 Data Model
-
-### Airdrop Program Schema
-
-The airdrop program is the core data structure that defines how an airdrop operates.
-
-#### AirdropProgram
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `string` | Unique identifier for the airdrop program |
-| `protocol` | `string` | Protocol identifier (e.g., "ETH", "SOL") |
-| `version` | `string` | Version of the airdrop program |
-| `name` | `string` | Display name of the airdrop program |
-| `description` | `string` | Detailed description of the airdrop |
-| `private` | `boolean` | Whether the airdrop is private or public |
-| `private` | `boolean` | Whether the airdrop is private or public |
-| `issuer` | `Issuer` | Issuer of the airdrop program |
-| `Rules` | `Rule` | Rules of the airdrop program |
-| `updatedAt` | `Date` | Timestamp of last update |
-
-#### Issuer
-| Field | Type | Description |
-|-------|------|-------------|
-| `issuer.name` | `string` | Name of the airdrop issuer |
-| `issuer.officialWebsite` | `string` | Official website URL |
-| `issuer.image` | `string` | Logo or image URL |
-| `issuer.twitter` | `string` | Twitter handle |
-| `issuer.telegram` | `string` | Telegram group link |
-| `issuer.discord` | `string` | Discord server invite |
-| `issuer.contract` | `string?` | Optional contract address |
-| `issuer.token` | `string?` | Optional token identifier |
-| `issuer.createdAt` | `Date` | Timestamp of issuer record creation |
-| `issuer.updatedAt` | `Date` | Timestamp of issuer record update |
-
-#### Rules
-| Field | Type | Description |
-|-------|------|-------------|
-| `rules.target` | `Target` | Target type of the airdrop |
-| `rules.claimMethod` | `ClaimMethod` | Method used for claiming |
-| `rules.claimUrl` | `string` | URL for claim endpoint |
-| `rules.checkEligibilityUrl` | `string` | URL for eligibility checking |
-| `rules.generateMessageUrl` | `string?` | Optional URL for message generation |
-| `rules.blockchain` | `string` | Target blockchain |
-| `rules.contract` | `string?` | Optional contract address |
-| `rules.supportDelegate` | `boolean` | Whether delegation is supported |
-| `rules.startAt` | `Date` | Start time of the airdrop |
-| `rules.expiresAt` | `Date` | Expiration time of the airdrop |
-| `rules.estimateCost` | `number?` | Optional estimated gas cost |
-| `rules.createdAt` | `Date` | Timestamp of rules creation |
-| `rules.updatedAt` | `Date` | Timestamp of rules update |
-
-### Enums
-
-#### Target Type
-```typescript
-enum Target {
-  nftHolder = 'nftHolder', 
-  nftAIAgent = 'nftAIAgent' 
+```json  
+{  
+  "protocol": "AirdropProgramRegistry",
+  "version": "0.0.1",
+  "name": "xNomad Genesis NFT Airdrop",   // Name of the your airdrop program  
+  "description": "Give 15% of NFT mint price as Xnomad AI Agent Initial funds", // Description of the your airdrop program  
+  "issuer": {                          // Replace with your project's corresponding information  
+    "name": "Xnomad.fun",              // Issuer's name  
+    "officialWebsite": "https://xnomadai.com", // Issuer's official website  
+    "image": "https://xnomad.ai/mint/logo.svg", // Issuer's logo URL  
+    "twitter": "https://x.com/xNomadAI", // Issuer's Twitter profile  
+    "telegram": "xnomad",              // Issuer's Telegram handle  
+    "discord": "https://discord.com/invite/xnomad", // Issuer's Discord link  
+    "contract": "optional_contract_address", // (Optional) Contract address for the airdrop  
+    "token": "optional_token_address"  // (Optional) Token address for the airdrop  
+  },  
+  "airdropRules": {                      // Rules for the airdrop  
+    "target": "nftAIAgent || nftHolder", // Target audience for the airdrop  
+    "claimMethod": "http",               // Method for claiming the airdrop  
+    "claimUrl": "https://project.endpoint/claim", // URL for claiming the airdrop  
+    "checkEligibilityUrl": "https://project.endpoint/check", // URL to check eligibility  
+    "blockchain": "solana",            // Blockchain network for the airdrop  
+    "contract": null,                  // (Optional) Contract address for the airdrop  
+    "supportDelegate": false,          // Whether delegation is supported  
+    "startAt": "2025-02-07T12:00:00Z", // Start time of the airdrop  
+    "expiresAt": "2025-02-10T12:00:00Z", // Expiration time of the airdrop  
+    "estimateCost": null               // (Optional) Estimated cost of the airdrop  
+  }  
 }
 ```
 
-#### Claim Method
-```typescript
-enum ClaimMethod {
-  http = 'http',
-  contract = 'contract'
-}
-```
+### Notes
+After successfully registering your airdrop program, please contact us to enable the claim functionality for your users.
+Once enabled, users will be able to claim their airdrops and check eligibility.
+
+
+
 
 ## 🔐 URL Signature Requirements
 
-When registering your project on airdrop-proxy, all endpoint URLs must implement signature verification. This ensures secure communication between the agent and your service.
+When registering your project on airdrop-proxy, claim URL must implement signature verification. This ensures secure communication between the agent and your service.
 
 ### Signature Verification Implementation
 
