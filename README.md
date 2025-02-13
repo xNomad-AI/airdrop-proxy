@@ -10,6 +10,28 @@ Enables AI-NFTs to claim airdrops and delegate airdrop eligibility. This service
 ## ⛓️ Supported Networks
 - Solana
 - EVM (Coming soon)
+## Airdrop Proxy Workflow
+![Airdrop Proxy Logic Diagram](./airdrop-proxy.jpg)  
+
+### Airdrop Program Registration
+
+Project teams use the provided API to register their airdrop programs.
+During registration.
+
+### AI_NFT Agents
+#### Eligibility Check:
+
+Agent can check their eligibility for the airdrop using the checkEligibilityUrl provided during registration.
+#### Claim Process:
+
+Eligible users can claim their airdrops through the claimUrl.
+The system processes the claim request and distributes the airdrop rewards to the user's wallet.
+
+### NFT Owners
+#### Delegation (Optional):
+
+If enabled, users can delegate their airdrop eligibility to agent wallet.
+This feature is useful for scenarios where users want to transfer their eligibility without transferring ownership of the underlying assets.
 
 
 ## 🛠️ Primary Use Case  
@@ -60,9 +82,6 @@ Below is an example of the request payload with parameter explanations:
 ### Notes
 After successfully registering your airdrop program, please contact us to enable the claim functionality for your users.
 Once enabled, users will be able to claim their airdrops and check eligibility.
-
-
-
 
 ## 🔐 URL Signature Requirements
 
